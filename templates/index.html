@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AtendeAI</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="chat-container">
+
+        <div class="chat-header">
+
+            <div class="avatar">
+                🤖
+            </div>
+
+            <div>
+                <h2>AtendeAI</h2>
+                <span>Online</span>
+            </div>
+
+        </div>
+
+
+        <div id="chat" class="chat">
+
+            <div class="mensagem bot">
+                Olá! 👋 Eu sou o AtendeAI.
+                Como posso te ajudar?
+            </div>
+
+        </div>
+
+
+        <div class="input-area">
+
+            <input
+                type="text"
+                id="mensagem"
+                placeholder="Digite sua mensagem..."
+            >
+
+            <button onclick="enviarMensagem()">
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script
+        src="{{ url_for('static', filename='js/chat.js') }}">
+    </script>
+
+</body>
+
+</html>

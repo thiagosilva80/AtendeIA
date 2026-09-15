@@ -86,3 +86,25 @@ def salvar_mensagem(cliente_id, mensagem, remetente):
 
     conexao.commit()
     conexao.close()
+    
+def buscar_historico(cliente_id, limite=10):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT mensagem, remetente, data
+        FROM mensagens
+        WHERE cliente_id = ?
+        ORDER BY id DESC
+        LIMIT ?
+    """, (cliente_id, limite))
+
+    mensagens = cursor.fetchall()
+
+    conexao.close()
+
+    # Como buscamos do mais recente para o mais antigo,
+    # vamos inverter para ficar na ordem correta.
+    mensagens = list(reversed(mensagens))
+
+    return mensagens
