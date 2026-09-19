@@ -19,7 +19,6 @@ def home():
 
 @app.route("/api/mensagem", methods=["POST"])
 def receber_mensagem():
-
     dados = request.get_json()
 
     mensagem = dados.get("mensagem")
@@ -33,30 +32,23 @@ def receber_mensagem():
         canal
     )
 
+    # Histórico das mensagens anteriores
+    historico = buscar_historico(cliente_id)
+
+    # Salva a mensagem atual
     salvar_mensagem(
         cliente_id,
         mensagem,
         "cliente"
     )
-    salvar_mensagem(
-    cliente_id,
-    mensagem,
-    "cliente"
-)
 
-    historico = buscar_historico(cliente_id)
-
+    # IA recebe o histórico anterior + mensagem atual
     resposta = processar_mensagem(
         mensagem,
         historico
     )
 
-    salvar_mensagem(
-        cliente_id,
-        resposta,
-        "bot"
-    )
-
+    # Salva a resposta da IA
     salvar_mensagem(
         cliente_id,
         resposta,
