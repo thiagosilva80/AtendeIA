@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AtendeAI</title>
+    <title>AtendeAI | Atendimento Inteligente</title>
 
     <link
         rel="stylesheet"
@@ -15,45 +15,152 @@
 
 <body>
 
-    <div class="chat-container">
+    <div class="app">
 
-        <div class="chat-header">
+        <!-- MENU LATERAL -->
 
-            <div class="avatar">
-                🤖
+        <aside class="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">🤖</div>
+
+                <div>
+                    <h2>AtendeAI</h2>
+                    <span>Central de atendimento</span>
+                </div>
             </div>
 
-            <div>
-                <h2>AtendeAI</h2>
-                <span>Online</span>
+            <div class="sidebar-title">
+                CONVERSAS
             </div>
 
-        </div>
+            <div id="lista-conversas">
+    <!-- Os clientes serão carregados automaticamente aqui -->
+                </div>
+
+        </aside>
 
 
-        <div id="chat" class="chat">
+        <!-- CHAT -->
 
-            <div class="mensagem bot">
-                Olá! 👋 Eu sou o AtendeAI.
-                Como posso te ajudar?
+        <main class="chat-area">
+
+            <header class="chat-header">
+
+                <div>
+                    <h3>Thiago</h3>
+
+                    <span class="online">
+                        ● Atendimento online
+                    </span>
+                </div>
+
+                <div class="ai-status">
+                    ✨ IA ativa
+                </div>
+
+            </header>
+
+
+            <div id="chat" class="chat-messages">
+
+                <div class="message bot">
+
+                    <div class="message-name">
+                        🤖 AtendeAI
+                    </div>
+
+                    <div class="bubble">
+                        Olá! 👋 Eu sou o AtendeAI.
+                        Como posso te ajudar?
+                    </div>
+
+                </div>
+
             </div>
 
-        </div>
+
+            <div class="input-area">
+
+                <input
+                    type="text"
+                    id="mensagem"
+                    placeholder="Digite uma mensagem..."
+                    autocomplete="off"
+                >
+
+                <button
+                    id="btn-enviar"
+                    onclick="enviarMensagem()"
+                >
+                    ➤
+                </button>
+
+            </div>
+
+        </main>
 
 
-        <div class="input-area">
+        <!-- INFORMAÇÕES DO CLIENTE -->
 
-            <input
-                type="text"
-                id="mensagem"
-                placeholder="Digite sua mensagem..."
+        <aside class="client-panel">
+
+            <div class="client-avatar">
+                T
+            </div>
+
+            <h2>Thiago</h2>
+
+            <span class="client-channel">
+                🌐 Web Chat
+            </span>
+
+
+            <div class="divider"></div>
+
+
+            <div class="info">
+
+                <span>STATUS</span>
+
+                <strong class="status-active">
+                    ● Em atendimento
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <span>ATENDIMENTO</span>
+
+                <strong id="modo-atendimento">
+                    ✨ Inteligência Artificial
+                </strong>
+
+            </div>
+
+
+            <div class="info">
+
+                <span>INTERESSE</span>
+
+                <strong>
+                    Não identificado
+                </strong>
+
+            </div>
+
+
+            <button
+                id="btn-assumir"
+                class="take-button"
+                onclick="alternarAtendimento()"
             >
-
-            <button onclick="enviarMensagem()">
-                ➤
+                👤 Assumir atendimento
             </button>
 
-        </div>
+        </aside>
 
     </div>
 

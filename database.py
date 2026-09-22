@@ -32,7 +32,21 @@ def criar_tabelas():
             REFERENCES clientes(id)
         )
     """)
+# Verifica se a coluna modo_atendimento já existe
+    cursor.execute("PRAGMA table_info(clientes)")
 
+    colunas = cursor.fetchall()
+
+    nomes_colunas = [
+            coluna["name"] for coluna in colunas
+        ]
+
+    if "modo_atendimento" not in nomes_colunas:
+
+            cursor.execute("""
+                ALTER TABLE clientes
+                ADD COLUMN modo_atendimento TEXT DEFAULT 'ia'
+            """)
     conexao.commit()
     conexao.close()
 
@@ -108,3 +122,85 @@ def buscar_historico(cliente_id, limite=10):
     mensagens = list(reversed(mensagens))
 
     return mensagens
+
+def listar_clientes():
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT
+            clientes.id,
+            clientes.nome,
+            clientes.identificador,
+            clientes.canal,
+            clientes.modo_atendimento,
+            (
+                SELECT mensagem
+                FROM mensagens
+                WHERE mensagens.cliente_id = clientes.id
+                ORDER BY mensagens.id DESC
+                LIMIT 1
+            ) AS ultima_mensagem
+        FROM clientes
+        ORDER BY clientes.id DESC
+    """)
+
+    clientes = cursor.fetchall()
+
+    conexao.close()
+
+    return clientes
+
+def buscar_todas_mensagens(cliente_id):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT
+            id,
+            mensagem,
+            remetente,
+            data
+        FROM mensagens
+        WHERE cliente_id = ?
+        ORDER BY id ASC
+    """, (cliente_id,))
+
+    mensagens = cursor.fetchall()
+
+    conexao.close()
+
+    return mensagens
+
+def alterar_modo_atendimento(cliente_id, modo):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        UPDATE clientes
+        SET modo_atendimento = ?
+        WHERE id = ?
+    """, (modo, cliente_id))
+
+    conexao.commit()
+    conexao.close()
+
+
+def buscar_modo_atendimento(cliente_id):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT modo_atendimento
+        FROM clientes
+        WHERE id = ?
+    """, (cliente_id,))
+
+    cliente = cursor.fetchone()
+
+    conexao.close()
+
+    if cliente:
+        return cliente["modo_atendimento"]
+
+    return "ia"
