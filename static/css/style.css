@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
     background: #0b141a;
@@ -13,7 +19,9 @@ body {
 }
 
 
-/* APP */
+/* ==========================================
+   APP
+========================================== */
 
 .app {
     width: 100%;
@@ -23,20 +31,28 @@ body {
 
     grid-template-columns:
         300px
-        1fr
+        minmax(0, 1fr)
         300px;
 
     background: #111b21;
+
+    overflow: hidden;
 }
 
 
-/* SIDEBAR */
+/* ==========================================
+   SIDEBAR
+========================================== */
 
 .sidebar {
     background: #111b21;
     border-right: 1px solid #2a3942;
 
     padding: 20px;
+
+    height: 100vh;
+
+    overflow-y: auto;
 }
 
 .logo {
@@ -73,11 +89,17 @@ body {
 
 .sidebar-title {
     color: #8696a0;
+
     font-size: 11px;
     font-weight: bold;
 
     margin-bottom: 15px;
 }
+
+
+/* ==========================================
+   CONVERSAS
+========================================== */
 
 .conversation {
     padding: 12px;
@@ -86,9 +108,16 @@ body {
 
     display: flex;
     align-items: center;
+
     gap: 10px;
 
     cursor: pointer;
+
+    margin-bottom: 5px;
+}
+
+.conversation:hover {
+    background: #182229;
 }
 
 .conversation.active {
@@ -98,6 +127,8 @@ body {
 .avatar {
     width: 42px;
     height: 42px;
+
+    min-width: 42px;
 
     border-radius: 50%;
 
@@ -115,6 +146,8 @@ body {
     flex-direction: column;
 
     flex: 1;
+
+    min-width: 0;
 }
 
 .conversation-info strong {
@@ -124,13 +157,18 @@ body {
 .conversation-info span {
     color: #8696a0;
     font-size: 12px;
-
     margin-top: 4px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .status-dot {
     width: 8px;
     height: 8px;
+
+    min-width: 8px;
 
     background: #00a884;
 
@@ -138,17 +176,35 @@ body {
 }
 
 
-/* CHAT */
+/* ==========================================
+   CHAT
+========================================== */
 
 .chat-area {
     display: flex;
     flex-direction: column;
 
+    height: 100vh;
+
+    min-height: 0;
+    min-width: 0;
+
+    overflow: hidden;
+
     background: #0b141a;
 }
 
+
+/* ==========================================
+   CABEÇALHO DO CHAT
+========================================== */
+
 .chat-header {
     height: 75px;
+
+    min-height: 75px;
+
+    flex-shrink: 0;
 
     background: #202c33;
 
@@ -188,12 +244,17 @@ body {
 }
 
 
-/* MENSAGENS */
+/* ==========================================
+   MENSAGENS
+========================================== */
 
 .chat-messages {
     flex: 1;
 
+    min-height: 0;
+
     overflow-y: auto;
+    overflow-x: hidden;
 
     padding: 30px;
 
@@ -201,6 +262,8 @@ body {
     flex-direction: column;
 
     gap: 15px;
+
+    scroll-behavior: smooth;
 }
 
 .message {
@@ -208,6 +271,8 @@ body {
 
     display: flex;
     flex-direction: column;
+
+    flex-shrink: 0;
 }
 
 .message.bot {
@@ -234,6 +299,9 @@ body {
     line-height: 1.5;
 
     font-size: 14px;
+
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .bot .bubble {
@@ -245,10 +313,14 @@ body {
 }
 
 
-/* INPUT */
+/* ==========================================
+   BARRA DE MENSAGEM
+========================================== */
 
 .input-area {
     min-height: 70px;
+
+    flex-shrink: 0;
 
     background: #202c33;
 
@@ -258,10 +330,14 @@ body {
     align-items: center;
 
     gap: 10px;
+
+    border-top: 1px solid #2a3942;
 }
 
 .input-area input {
     flex: 1;
+
+    min-width: 0;
 
     border: none;
     outline: none;
@@ -285,6 +361,8 @@ body {
     width: 45px;
     height: 45px;
 
+    min-width: 45px;
+
     border-radius: 50%;
 
     border: none;
@@ -296,6 +374,8 @@ body {
     font-size: 18px;
 
     cursor: pointer;
+
+    transition: 0.2s;
 }
 
 .input-area button:hover {
@@ -303,7 +383,9 @@ body {
 }
 
 
-/* CLIENTE */
+/* ==========================================
+   PAINEL DO CLIENTE
+========================================== */
 
 .client-panel {
     background: #111b21;
@@ -313,6 +395,10 @@ body {
     padding: 30px 25px;
 
     text-align: center;
+
+    height: 100vh;
+
+    overflow-y: auto;
 }
 
 .client-avatar {
@@ -382,6 +468,11 @@ body {
     color: #00a884;
 }
 
+
+/* ==========================================
+   BOTÃO ASSUMIR ATENDIMENTO
+========================================== */
+
 .take-button {
     width: 100%;
 
@@ -398,6 +489,8 @@ body {
     cursor: pointer;
 
     margin-top: 15px;
+
+    transition: 0.2s;
 }
 
 .take-button:hover {
@@ -407,7 +500,28 @@ body {
 }
 
 
-/* RESPONSIVO */
+/* ==========================================
+   SCROLLBAR
+========================================== */
+
+.chat-messages::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar,
+.client-panel::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb,
+.sidebar::-webkit-scrollbar-thumb,
+.client-panel::-webkit-scrollbar-thumb {
+    background: #37464f;
+
+    border-radius: 10px;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
 
 @media (max-width: 950px) {
 
@@ -418,9 +532,10 @@ body {
     .app {
         grid-template-columns:
             260px
-            1fr;
+            minmax(0, 1fr);
     }
 }
+
 
 @media (max-width: 650px) {
 
@@ -430,5 +545,13 @@ body {
 
     .app {
         grid-template-columns: 1fr;
+    }
+
+    .chat-messages {
+        padding: 20px 15px;
+    }
+
+    .message {
+        max-width: 85%;
     }
 }

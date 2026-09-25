@@ -15,56 +15,108 @@ def resposta_local(mensagem):
 
     texto = mensagem.lower()
 
-    if "oi" in texto or "olá" in texto or "ola" in texto:
+    # PEDIDO PARA FALAR COM HUMANO
+    if (
+        "atendente" in texto
+        or "humano" in texto
+        or "falar com alguém" in texto
+        or "falar com alguem" in texto
+        or "pessoa" in texto
+    ):
         return (
-            "Olá! 👋 Eu sou o AtendeAI. "
+            "Sem problemas! 👤 "
+            "Vou encaminhar sua conversa para "
+            "um atendente da equipe."
+        )
+
+    # DEMONSTRAÇÃO
+    elif (
+        "demonstração" in texto
+        or "demonstracao" in texto
+    ):
+        return (
+            "Claro! Podemos registrar seu interesse "
+            "em uma demonstração da solução. "
+            "Qual é o nome da sua empresa?"
+        )
+
+    # SOLUÇÕES PARA EMPRESA
+    elif (
+        "empresa" in texto
+        or "equipe" in texto
+        or "soluções" in texto
+        or "solucoes" in texto
+    ):
+        return (
+            "Claro! 😊 Temos soluções voltadas para empresas. "
+            "Para entender melhor sua necessidade, "
+            "quantas pessoas fazem parte da sua equipe?"
+        )
+
+    # PLANOS
+    elif (
+        "plano" in texto
+        or "planos" in texto
+    ):
+        return (
+            "Claro! 😊 Posso te ajudar a conhecer "
+            "nossas soluções. Você procura uma opção "
+            "para uso pessoal ou para sua empresa?"
+        )
+
+    # PREÇOS
+    elif (
+        "preço" in texto
+        or "preco" in texto
+        or "valor" in texto
+    ):
+        return (
+            "Os valores dependem das necessidades "
+            "de cada empresa. Posso coletar algumas "
+            "informações para uma solicitação comercial."
+        )
+
+    # SAUDAÇÃO
+    elif (
+        "oi" in texto
+        or "olá" in texto
+        or "ola" in texto
+    ):
+        return (
+            "Olá! 👋 Eu sou o AtendeAI, "
+            "assistente virtual da empresa. "
             "Como posso ajudar você?"
         )
 
-    elif "orçamento" in texto or "orcamento" in texto:
-        return (
-            "Claro! 😊 Posso te ajudar com o orçamento. "
-            "Qual serviço você deseja realizar?"
-        )
-
-    elif "raspagem" in texto:
-        return (
-            "Perfeito! Trabalhamos com atendimento para "
-            "solicitações de raspagem. Qual é aproximadamente "
-            "a metragem do local?"
-        )
-
-    elif "humano" in texto or "atendente" in texto:
-        return (
-            "Claro! Vou registrar que você deseja falar "
-            "com um atendente."
-        )
-
+    # RESPOSTA PADRÃO
     else:
         return (
-            "Entendi! 😊 No momento estou funcionando em "
-            "modo de desenvolvimento. Pode me contar um "
-            "pouco mais sobre o que você precisa?"
+            "Entendi! 😊 Posso fornecer informações "
+            "sobre nossos serviços, registrar seu interesse "
+            "ou encaminhar você para um atendente."
         )
 
 
 def gerar_resposta_ia(mensagem, historico):
 
     instrucoes = """
-    Você é o AtendeAI, um assistente virtual de atendimento empresarial.
+Você é o AtendeAI, um assistente virtual de atendimento empresarial.
 
-    Seu objetivo é:
-    - atender clientes com educação;
-    - responder de forma clara e objetiva;
-    - identificar quando o cliente deseja um orçamento;
-    - fazer perguntas para coletar informações importantes;
-    - nunca inventar preços;
-    - nunca inventar informações sobre a empresa;
-    - encaminhar para um atendente humano quando necessário.
+O AtendeAI pode ser utilizado por empresas de diferentes segmentos.
 
-    Responda em português brasileiro.
-    """
+Seu objetivo é:
+- receber e atender clientes;
+- responder de forma educada, profissional e objetiva;
+- entender o que o cliente procura;
+- coletar informações importantes;
+- identificar oportunidades comerciais;
+- registrar interesse em produtos ou serviços;
+- nunca inventar preços ou informações;
+- manter o contexto da conversa;
+- encaminhar o cliente para um atendente humano quando necessário.
 
+Responda em português brasileiro.
+"""
     conversa = []
 
     for item in historico:

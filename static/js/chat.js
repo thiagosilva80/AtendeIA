@@ -55,6 +55,65 @@ async function enviarMensagem() {
 
     chat.scrollTop = chat.scrollHeight;
 
+    // ==========================================
+// MODO HUMANO
+// ==========================================
+
+if (
+    clienteSelecionado.modo_atendimento
+    === "humano"
+) {
+
+    try {
+
+        const resposta = await fetch(
+            `/api/clientes/${clienteSelecionado.id}/responder`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    mensagem: mensagem
+                })
+            }
+        );
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            alert(dados.erro);
+            return;
+        }
+
+        // Recarrega a conversa para mostrar
+        // a mensagem salva no banco
+
+        await carregarConversa(
+            clienteSelecionado.id,
+            clienteSelecionado.nome,
+            clienteSelecionado.canal
+        );
+
+        carregarClientes();
+
+        return;
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro ao responder cliente:",
+            erro
+        );
+
+        return;
+    }
+}
+
 
     try {
 
@@ -85,7 +144,19 @@ async function enviarMensagem() {
 
 
         const dados = await resposta.json();
+    
+                // ==========================================
+        // ATUALIZA MODO IA / HUMANO
+        // ==========================================
 
+        if (dados.modo_atendimento) {
+
+            clienteSelecionado.modo_atendimento =
+                dados.modo_atendimento;
+
+            atualizarModoAtendimento();
+
+        }
 
         // RESPOSTA DO ATENDEAI
 
@@ -290,7 +361,63 @@ async function carregarConversa(
             document.getElementById("chat");
 
 
-        // ATUALIZA IA / HUMANO NO PAINEL
+        // ==========================================
+        // ATUALIZAR DADOS DO CLIENTE
+        // ==========================================
+
+        document
+            .getElementById("chat-cliente-nome")
+            .textContent = nome;
+
+
+        document
+            .getElementById("cliente-nome")
+            .textContent = nome;
+
+
+        // AVATAR
+
+        const inicial =
+            nome
+                ? nome.charAt(0).toUpperCase()
+                : "?";
+
+        document
+            .getElementById("cliente-avatar")
+            .textContent = inicial;
+
+
+        // CANAL
+
+        const elementoCanal =
+            document.getElementById(
+                "cliente-canal"
+            );
+
+        if (canal === "whatsapp") {
+
+            elementoCanal.textContent =
+                "💬 WhatsApp";
+
+        }
+
+        else if (canal === "telegram") {
+
+            elementoCanal.textContent =
+                "✈️ Telegram";
+
+        }
+
+        else {
+
+            elementoCanal.textContent =
+                "🌐 Web Chat";
+
+        }
+
+
+        // ATUALIZA IA / HUMANO
+
         atualizarModoAtendimento();
 
 
@@ -299,7 +426,9 @@ async function carregarConversa(
         chat.innerHTML = "";
 
 
-        // CARREGA AS MENSAGENS
+        // ==========================================
+        // CARREGAR MENSAGENS
+        // ==========================================
 
         mensagens.forEach(item => {
 
@@ -307,7 +436,9 @@ async function carregarConversa(
                 document.createElement("div");
 
 
+            // ======================================
             // MENSAGEM DO CLIENTE
+            // ======================================
 
             if (item.remetente === "cliente") {
 
@@ -318,6 +449,7 @@ async function carregarConversa(
 
                 elemento.innerHTML = `
                     <div class="message-name"></div>
+
                     <div class="bubble"></div>
                 `;
 
@@ -328,7 +460,33 @@ async function carregarConversa(
             }
 
 
-            // MENSAGEM DO ATENDEAI
+            // ======================================
+            // MENSAGEM DO ATENDENTE
+            // ======================================
+
+            else if (
+                item.remetente === "atendente"
+            ) {
+
+                elemento.classList.add(
+                    "message",
+                    "bot"
+                );
+
+                elemento.innerHTML = `
+                    <div class="message-name">
+                        👤 Atendente
+                    </div>
+
+                    <div class="bubble"></div>
+                `;
+
+            }
+
+
+            // ======================================
+            // MENSAGEM DA IA
+            // ======================================
 
             else {
 
@@ -358,6 +516,8 @@ async function carregarConversa(
         });
 
 
+        // DESCE PARA A ÚLTIMA MENSAGEM
+
         chat.scrollTop =
             chat.scrollHeight;
 
@@ -373,7 +533,6 @@ async function carregarConversa(
     }
 
 }
-
 
 // ==========================================
 // ALTERNAR IA / HUMANO
@@ -453,16 +612,24 @@ function atualizarModoAtendimento() {
         return;
     }
 
-
     const textoModo =
         document.getElementById(
             "modo-atendimento"
         );
 
-
     const botao =
         document.getElementById(
             "btn-assumir"
+        );
+
+    const statusTopo =
+        document.getElementById(
+            "chat-status-ia"
+        );
+
+    const input =
+        document.getElementById(
+            "mensagem"
         );
 
 
@@ -473,11 +640,12 @@ function atualizarModoAtendimento() {
         );
 
         return;
-
     }
 
 
+    // ==========================================
     // ATENDIMENTO HUMANO
+    // ==========================================
 
     if (
         clienteSelecionado.modo_atendimento
@@ -490,10 +658,22 @@ function atualizarModoAtendimento() {
         botao.textContent =
             "✨ Devolver para IA";
 
+        if (statusTopo) {
+            statusTopo.textContent =
+                "👤 Humano";
+        }
+
+        if (input) {
+            input.placeholder =
+                "Responder como atendente...";
+        }
+
     }
 
 
+    // ==========================================
     // ATENDIMENTO COM IA
+    // ==========================================
 
     else {
 
@@ -502,6 +682,16 @@ function atualizarModoAtendimento() {
 
         botao.textContent =
             "👤 Assumir atendimento";
+
+        if (statusTopo) {
+            statusTopo.textContent =
+                "✨ IA";
+        }
+
+        if (input) {
+            input.placeholder =
+                "Simular mensagem do cliente...";
+        }
 
     }
 

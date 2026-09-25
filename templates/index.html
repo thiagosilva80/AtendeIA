@@ -3,7 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>AtendeAI | Atendimento Inteligente</title>
 
@@ -17,52 +21,75 @@
 
     <div class="app">
 
-        <!-- MENU LATERAL -->
+        <!-- ======================================
+             MENU LATERAL
+        ======================================= -->
 
         <aside class="sidebar">
 
             <div class="logo">
-                <div class="logo-icon">🤖</div>
+
+                <div class="logo-icon">
+                    🤖
+                </div>
 
                 <div>
                     <h2>AtendeAI</h2>
                     <span>Central de atendimento</span>
                 </div>
+
             </div>
+
 
             <div class="sidebar-title">
                 CONVERSAS
             </div>
 
+
             <div id="lista-conversas">
-    <!-- Os clientes serão carregados automaticamente aqui -->
-                </div>
+                <!-- Clientes carregados pelo JavaScript -->
+            </div>
 
         </aside>
 
 
-        <!-- CHAT -->
+        <!-- ======================================
+             ÁREA DO CHAT
+        ======================================= -->
 
         <main class="chat-area">
 
             <header class="chat-header">
 
                 <div>
-                    <h3>Thiago</h3>
+
+                    <h3 id="chat-cliente-nome">
+                        Selecione uma conversa
+                    </h3>
 
                     <span class="online">
                         ● Atendimento online
                     </span>
+
                 </div>
 
-                <div class="ai-status">
-                    ✨ IA ativa
+
+                <div
+                    id="chat-status-ia"
+                    class="ai-status"
+                >
+                    ✨ IA
                 </div>
 
             </header>
 
 
-            <div id="chat" class="chat-messages">
+            <!-- MENSAGENS -->
+
+            <div
+                id="chat"
+                class="chat-messages"
+            >
 
                 <div class="message bot">
 
@@ -71,14 +98,15 @@
                     </div>
 
                     <div class="bubble">
-                        Olá! 👋 Eu sou o AtendeAI.
-                        Como posso te ajudar?
+                        Selecione uma conversa para iniciar.
                     </div>
 
                 </div>
 
             </div>
 
+
+            <!-- CAMPO DE MENSAGEM -->
 
             <div class="input-area">
 
@@ -101,27 +129,44 @@
         </main>
 
 
-        <!-- INFORMAÇÕES DO CLIENTE -->
+        <!-- ======================================
+             INFORMAÇÕES DO CLIENTE
+        ======================================= -->
 
         <aside class="client-panel">
 
-            <div class="client-avatar">
-                T
+
+            <div
+                id="cliente-avatar"
+                class="client-avatar"
+            >
+                ?
             </div>
 
-            <h2>Thiago</h2>
 
-            <span class="client-channel">
-                🌐 Web Chat
+            <h2 id="cliente-nome">
+                Nenhum cliente
+            </h2>
+
+
+            <span
+                id="cliente-canal"
+                class="client-channel"
+            >
+                —
             </span>
 
 
             <div class="divider"></div>
 
 
+            <!-- STATUS -->
+
             <div class="info">
 
-                <span>STATUS</span>
+                <span>
+                    STATUS
+                </span>
 
                 <strong class="status-active">
                     ● Em atendimento
@@ -130,9 +175,13 @@
             </div>
 
 
+            <!-- MODO DE ATENDIMENTO -->
+
             <div class="info">
 
-                <span>ATENDIMENTO</span>
+                <span>
+                    ATENDIMENTO
+                </span>
 
                 <strong id="modo-atendimento">
                     ✨ Inteligência Artificial
@@ -141,16 +190,22 @@
             </div>
 
 
+            <!-- INTERESSE -->
+
             <div class="info">
 
-                <span>INTERESSE</span>
+                <span>
+                    INTERESSE
+                </span>
 
-                <strong>
+                <strong id="cliente-interesse">
                     Não identificado
                 </strong>
 
             </div>
 
+
+            <!-- ASSUMIR ATENDIMENTO -->
 
             <button
                 id="btn-assumir"
@@ -166,8 +221,8 @@
 
 
     <script
-        src="{{ url_for('static', filename='js/chat.js') }}">
-    </script>
+        src="{{ url_for('static', filename='js/chat.js') }}"
+    ></script>
 
 </body>
 

@@ -160,27 +160,65 @@ def receber_mensagem():
     )
 
 
-    # Descobre se o atendimento
-    # está com IA ou humano
+    # ==========================================
+    # DETECTAR PEDIDO DE ATENDENTE HUMANO
+    # ==========================================
 
-    modo_atendimento = buscar_modo_atendimento(
-        cliente_id
+    texto = mensagem.lower()
+
+    pedidos_humano = [
+        "atendente",
+        "humano",
+        "falar com alguém",
+        "falar com alguem",
+        "falar com uma pessoa",
+        "atendimento humano"
+    ]
+
+    solicitou_humano = any(
+        termo in texto
+        for termo in pedidos_humano
     )
 
 
-    # ======================================
-    # ATENDIMENTO HUMANO
-    # ======================================
+    if solicitou_humano:
 
-    if modo_atendimento == "humano":
+        # Salva uma última resposta automática
+
+        resposta = (
+            "Sem problemas! 👤 "
+            "Vou encaminhar sua conversa para "
+            "um atendente da equipe."
+        )
+
+        salvar_mensagem(
+            cliente_id,
+            resposta,
+            "bot"
+        )
+
+        # Transfere a conversa para humano
+
+        alterar_modo_atendimento(
+            cliente_id,
+            "humano"
+        )
 
         return jsonify({
             "cliente_id": cliente_id,
             "mensagem": mensagem,
-            "resposta": None,
-            "modo_atendimento": "humano"
+            "resposta": resposta,
+            "modo_atendimento": "humano",
+            "transferido": True
         })
 
+
+    # Descobre quem está responsável
+    # pelo atendimento
+
+    modo_atendimento = buscar_modo_atendimento(
+        cliente_id
+    )
 
     # ======================================
     # ATENDIMENTO COM IA
@@ -212,6 +250,44 @@ def receber_mensagem():
 # ==========================================
 # INICIAR SERVIDOR
 # ==========================================
+
+# ==========================================
+# RESPOSTA DO ATENDENTE HUMANO
+# ==========================================
+
+@app.route(
+    "/api/clientes/<int:cliente_id>/responder",
+    methods=["POST"]
+)
+def responder_cliente(cliente_id):
+
+    dados = request.get_json()
+
+    mensagem = dados.get("mensagem")
+
+    if not mensagem:
+        return jsonify({
+            "erro": "Mensagem não informada"
+        }), 400
+
+    modo = buscar_modo_atendimento(cliente_id)
+
+    if modo != "humano":
+        return jsonify({
+            "erro": "O atendimento ainda está com a IA"
+        }), 400
+
+    salvar_mensagem(
+        cliente_id,
+        mensagem,
+        "atendente"
+    )
+
+    return jsonify({
+        "cliente_id": cliente_id,
+        "mensagem": mensagem,
+        "remetente": "atendente"
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
